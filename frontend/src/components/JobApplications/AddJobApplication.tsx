@@ -37,6 +37,7 @@ const formSchema = z.object({
   company_name: z.string().min(1, { message: "Company name is required" }),
   job_title: z.string().min(1, { message: "Job title is required" }),
   portal: z.string().optional(),
+  job_link: z.string().optional(),
   status: z.string().min(1, { message: "Status is required" }),
   applied_date: z.string().optional(),
   recruiter_name: z.string().optional(),
@@ -58,8 +59,9 @@ const AddJobApplication = () => {
     defaultValues: {
       company_name: "",
       job_title: "",
-      portal: "LinkedIn",
-      status: "Applied",
+      portal: "",
+      job_link: "",
+      status: "",
       applied_date: "",
       recruiter_name: "",
       follow_up_date: "",
@@ -146,6 +148,20 @@ const AddJobApplication = () => {
                       <Input placeholder="LinkedIn" {...field} />
                     </FormControl>
                     <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="job_link"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Job Link</FormLabel>
+                    <FormControl>
+                      <Input placeholder="https://www.linkedin.com/jobs/..." {...field} />
+                    </FormControl>
+                   <FormMessage />
                   </FormItem>
                 )}
               />

@@ -115,6 +115,7 @@ class JobApplicationBase(SQLModel):
     company_name: str = Field(min_length=1, max_length=255)
     job_title: str = Field(min_length=1, max_length=255)
     portal: str | None = Field(default=None, max_length=255)
+    job_link: str | None = Field(default=None, max_length=500)
     status: str = Field(default="Applied", max_length=100)
     applied_date: date | None = None
     recruiter_name: str | None = Field(default=None, max_length=255)
