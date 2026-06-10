@@ -36,6 +36,47 @@ export type ItemUpdate = {
     description?: (string | null);
 };
 
+export type JobApplicationCreate = {
+    company_name: string;
+    job_title: string;
+    portal?: (string | null);
+    status?: string;
+    applied_date?: (string | null);
+    recruiter_name?: (string | null);
+    follow_up_date?: (string | null);
+    notes?: (string | null);
+};
+
+export type JobApplicationPublic = {
+    company_name: string;
+    job_title: string;
+    portal?: (string | null);
+    status?: string;
+    applied_date?: (string | null);
+    recruiter_name?: (string | null);
+    follow_up_date?: (string | null);
+    notes?: (string | null);
+    id: string;
+    owner_id: string;
+    created_at?: (string | null);
+};
+
+export type JobApplicationsPublic = {
+    data: Array<JobApplicationPublic>;
+    count: number;
+};
+
+export type JobApplicationUpdate = {
+    company_name?: (string | null);
+    job_title?: (string | null);
+    portal?: (string | null);
+    status?: (string | null);
+    applied_date?: (string | null);
+    recruiter_name?: (string | null);
+    follow_up_date?: (string | null);
+    notes?: (string | null);
+};
+
 export type Message = {
     message: string;
 };
@@ -144,6 +185,40 @@ export type ItemsDeleteItemData = {
 };
 
 export type ItemsDeleteItemResponse = (Message);
+
+export type JobApplicationsReadJobApplicationsData = {
+    limit?: number;
+    skip?: number;
+};
+
+export type JobApplicationsReadJobApplicationsResponse = (JobApplicationsPublic);
+
+export type JobApplicationsCreateJobApplicationData = {
+    requestBody: JobApplicationCreate;
+};
+
+export type JobApplicationsCreateJobApplicationResponse = (JobApplicationPublic);
+
+export type JobApplicationsReadJobApplicationData = {
+    id: string;
+};
+
+export type JobApplicationsReadJobApplicationResponse = (JobApplicationPublic);
+
+export type JobApplicationsUpdateJobApplicationData = {
+    id: string;
+    requestBody: JobApplicationUpdate;
+};
+
+export type JobApplicationsUpdateJobApplicationResponse = (JobApplicationPublic);
+
+export type JobApplicationsDeleteJobApplicationData = {
+    id: string;
+};
+
+export type JobApplicationsDeleteJobApplicationResponse = ({
+    [key: string]: (string);
+});
 
 export type LoginLoginAccessTokenData = {
     formData: Body_login_login_access_token;

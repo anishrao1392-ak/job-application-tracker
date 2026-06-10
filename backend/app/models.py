@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 
 from pydantic import EmailStr
 from sqlalchemy import DateTime
@@ -54,6 +54,9 @@ class User(UserBase, table=True):
         sa_type=DateTime(timezone=True),  # type: ignore
     )
     items: list["Item"] = Relationship(back_populates="owner", cascade_delete=True)
+    job_applications: list["JobApplication"] = Relationship(
+        back_populates="owner", cascade_delete=True
+    )
 
 
 # Properties to return via API, id is always required
@@ -107,6 +110,49 @@ class ItemsPublic(SQLModel):
     data: list[ItemPublic]
     count: int
 
+# Shared properties
+class JobApplicationBase(SQLModel):
+    company_name: str = Field(min_length=1, max_length=255)
+    job_title: str = Field(min_length=1, max_length=255)
+    portal: str | None = Field(default=None, max_length=255)
+    status: str = Field(default="Applied", max_length=100)
+    applied_date: date | None = None
+    recruiter_name: str | None = Field(default=None, max_length=255)
+    follow_up_date: date | None = None
+    notes: str | None = None
+
+
+class JobApplicationCreate(JobApplicationBase):
+    pass
+
+
+class JobApplicationUpdate(JobApplicationBase):
+    company_name: str | None = Field(default=None, min_length=1, max_length=255)  # type: ignore[assignment]
+    job_title: str | None = Field(default=None, min_length=1, max_length=255)  # type: ignore[assignment]
+    status: str | None = Field(default=None, max_length=100)  # type: ignore[assignment]
+
+
+class JobApplication(JobApplicationBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    created_at: datetime | None = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+    owner_id: uuid.UUID = Field(
+        foreign_key="user.id", nullable=False, ondelete="CASCADE"
+    )
+    owner: User | None = Relationship(back_populates="job_applications")
+
+
+class JobApplicationPublic(JobApplicationBase):
+    id: uuid.UUID
+    owner_id: uuid.UUID
+    created_at: datetime | None = None
+
+
+class JobApplicationsPublic(SQLModel):
+    data: list[JobApplicationPublic]
+    count: int
 
 # Generic message
 class Message(SQLModel):

@@ -196,6 +196,321 @@ export const ItemsPublicSchema = {
     title: 'ItemsPublic'
 } as const;
 
+export const JobApplicationCreateSchema = {
+    properties: {
+        company_name: {
+            type: 'string',
+            maxLength: 255,
+            minLength: 1,
+            title: 'Company Name'
+        },
+        job_title: {
+            type: 'string',
+            maxLength: 255,
+            minLength: 1,
+            title: 'Job Title'
+        },
+        portal: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Portal'
+        },
+        status: {
+            type: 'string',
+            maxLength: 100,
+            title: 'Status',
+            default: 'Applied'
+        },
+        applied_date: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Applied Date'
+        },
+        recruiter_name: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Recruiter Name'
+        },
+        follow_up_date: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Follow Up Date'
+        },
+        notes: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Notes'
+        }
+    },
+    type: 'object',
+    required: ['company_name', 'job_title'],
+    title: 'JobApplicationCreate'
+} as const;
+
+export const JobApplicationPublicSchema = {
+    properties: {
+        company_name: {
+            type: 'string',
+            maxLength: 255,
+            minLength: 1,
+            title: 'Company Name'
+        },
+        job_title: {
+            type: 'string',
+            maxLength: 255,
+            minLength: 1,
+            title: 'Job Title'
+        },
+        portal: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Portal'
+        },
+        status: {
+            type: 'string',
+            maxLength: 100,
+            title: 'Status',
+            default: 'Applied'
+        },
+        applied_date: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Applied Date'
+        },
+        recruiter_name: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Recruiter Name'
+        },
+        follow_up_date: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Follow Up Date'
+        },
+        notes: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Notes'
+        },
+        id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Id'
+        },
+        owner_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Owner Id'
+        },
+        created_at: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date-time'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Created At'
+        }
+    },
+    type: 'object',
+    required: ['company_name', 'job_title', 'id', 'owner_id'],
+    title: 'JobApplicationPublic'
+} as const;
+
+export const JobApplicationUpdateSchema = {
+    properties: {
+        company_name: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255,
+                    minLength: 1
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Company Name'
+        },
+        job_title: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255,
+                    minLength: 1
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Job Title'
+        },
+        portal: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Portal'
+        },
+        status: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 100
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Status'
+        },
+        applied_date: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Applied Date'
+        },
+        recruiter_name: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Recruiter Name'
+        },
+        follow_up_date: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Follow Up Date'
+        },
+        notes: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Notes'
+        }
+    },
+    type: 'object',
+    title: 'JobApplicationUpdate'
+} as const;
+
+export const JobApplicationsPublicSchema = {
+    properties: {
+        data: {
+            items: {
+                '$ref': '#/components/schemas/JobApplicationPublic'
+            },
+            type: 'array',
+            title: 'Data'
+        },
+        count: {
+            type: 'integer',
+            title: 'Count'
+        }
+    },
+    type: 'object',
+    required: ['data', 'count'],
+    title: 'JobApplicationsPublic'
+} as const;
+
 export const MessageSchema = {
     properties: {
         message: {
