@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
-import { Search, Trash2 } from "lucide-react"
+import { Download, Search, Trash2 } from "lucide-react"
 import { Suspense, useMemo, useState } from "react"
 
 import { JobApplicationsService } from "@/client"
@@ -11,6 +11,14 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import useCustomToast from "@/hooks/useCustomToast"
 import { handleError } from "@/utils"
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts"
 
 function getJobApplicationsQueryOptions() {
   return {
@@ -66,6 +74,40 @@ function JobApplicationsContent() {
       queryClient.invalidateQueries({ queryKey: ["job-applications"] })
     },
   })
+  
+  const handleExportCsv = () => {
+    const headers = [
+      "Company",
+      "Job Title",
+      "Portal",
+      "Status",
+      "Applied Date",
+      "Follow Up Date",
+    ]
+
+    const rows = sortedJobs.map((job) => [
+      job.company_name,
+      job.job_title,
+      job.portal,
+      job.status,
+      job.applied_date,
+      job.follow_up_date,
+    ])
+
+    const csvContent = [headers, ...rows]
+      .map((row) => row.map((value) => `"${value ?? ""}"`).join(","))
+      .join("\n")
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement("a")
+
+    link.href = url
+    link.download = "job-applications.csv"
+    link.click()
+
+    URL.revokeObjectURL(url)
+  }
 
   const handleDelete = (id: string) => {
     const confirmed = window.confirm(
@@ -131,6 +173,25 @@ function JobApplicationsContent() {
     job.follow_up_date < today,
   ).length
 
+  const chartData = [
+    {
+      name: "Applied",
+      value: appliedCount,
+    },
+    {
+      name: "Interview",
+      value: interviewCount,
+    },
+    {
+      name: "Offer",
+      value: offerCount,
+    },
+    {
+      name: "Rejected",
+      value: rejectedCount,
+    },
+  ]
+
   if (data.data.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center text-center py-12">
@@ -179,6 +240,28 @@ function JobApplicationsContent() {
         <p className="text-sm text-muted-foreground">Overdue</p>
         <p className="text-2xl font-bold">{overdueCount}</p>
       </div>
+    </div>
+    
+    <div className="rounded-md border p-4">
+      <h3 className="mb-4 text-lg font-semibold">Applications by Status</h3>
+
+      <div className="h-64">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={chartData}>
+            <XAxis dataKey="name" />
+            <YAxis allowDecimals={false} />
+            <Tooltip />
+            <Bar dataKey="value" />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+
+    <div className="flex justify-end">
+      <Button onClick={handleExportCsv} variant="outline">
+        <Download className="mr-2 h-4 w-4" />
+        Export CSV
+      </Button>
     </div>
 
     <input
@@ -242,7 +325,14 @@ function JobApplicationsContent() {
             </thead>
             <tbody>
               {sortedJobs.map((job) => (
-                <tr key={job.id} className="border-b">
+                <tr
+                  key={job.id}
+                  className={`border-b ${
+                    job.follow_up_date && job.follow_up_date < today
+                      ? "bg-red-900/20"
+                      : ""
+                  }`}
+                >
                   <td className="p-3">{job.company_name}</td>
                   <td className="p-3">{job.job_title}</td>
                   <td className="p-3">{job.portal}</td>
