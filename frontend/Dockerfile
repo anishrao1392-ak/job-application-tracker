@@ -2,11 +2,11 @@ FROM oven/bun:1 AS build-stage
 
 WORKDIR /app
 
-COPY package.json bun.lock ./
+COPY frontend/package.json frontend/bun.lock ./
 
 RUN bun install
 
-COPY . .
+COPY frontend/ .
 
 ARG VITE_API_URL
 
@@ -17,5 +17,5 @@ FROM nginx:1
 
 COPY --from=build-stage /app/dist/ /usr/share/nginx/html
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY nginx-backend-not-found.conf /etc/nginx/extra-conf.d/backend-not-found.conf
+COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
+COPY frontend/nginx-backend-not-found.conf /etc/nginx/extra-conf.d/backend-not-found.conf
